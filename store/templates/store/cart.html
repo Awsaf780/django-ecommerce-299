@@ -13,12 +13,12 @@
                     <th><h5>Items: <strong>3</strong></h5></th>
                     <th><h5>Total: <strong>$60</strong></h5></th>
                     <th>
-                        <a style="float: right; margin: 5px;" class="btn btn-success" href="{% url 'checkout' %}">Checkout</a>
+                        <a style="float: right;" class="btn add-btn" href="{% url 'checkout' %}">Checkout</a>
                     </th>
                 </tr>
             </table>
         </div>
-        <br>
+
         <div class="box-element">
             <div class="cart-row">
                 <div style="flex: 1"></div>
@@ -29,7 +29,34 @@
             </div>
 
             <div class="cart-row">
-                <div style="flex: 1"><img class="row-image" src="{% static 'images/placeholder.png' %}" alt=""></div>
+                <div style="flex: 1"><img class="row-image" src="{% static 'images/sunglass.png' %}" alt=""></div>
+                <div style="flex: 2">Product 1</div>
+                <div style="flex: 1">$20</div>
+                <div style="flex: 1">
+                    <p class="quantity">2</p>
+                    <div class="quantity">
+                        <img src="{% static 'images/arrow-up.png' %}" alt="" class="chg-quantity">
+                        <img src="{% static 'images/arrow-down.png' %}" alt="" class="chg-quantity">
+
+                    </div>
+                </div>
+                <div style="flex: 1">$40</div>
+            </div>
+            <div class="cart-row">
+                <div style="flex: 1"><img class="row-image" src="{% static 'images/hat.png' %}" alt=""></div>
+                <div style="flex: 2">Product 1</div>
+                <div style="flex: 1">$20</div>
+                <div style="flex: 1">
+                    <p class="quantity">2</p>
+                    <div class="quantity">
+                        <img src="{% static 'images/arrow-up.png' %}" alt="" class="chg-quantity">
+                        <img src="{% static 'images/arrow-down.png' %}" alt="" class="chg-quantity">
+
+                    </div>
+                </div>
+                <div style="flex: 1">$40</div>
+            </div><div class="cart-row">
+                <div style="flex: 1"><img class="row-image" src="{% static 'images/shoe.png' %}" alt=""></div>
                 <div style="flex: 2">Product 1</div>
                 <div style="flex: 1">$20</div>
                 <div style="flex: 1">
