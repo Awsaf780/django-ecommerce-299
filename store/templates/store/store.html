@@ -4,8 +4,16 @@
 
 {% block content %}
 
+
 <div class="row">
 
+<div class="form-inline mob-cart-float">
+    <a href="{% url 'cart' %}">
+        <img src="{% static 'images/cart.svg' %}" id="cart-icon-mob">
+    </a>
+    <p id="cart-total-mob">{{cartItems}}</p>
+</div>
+    
     {% for product in products %}
     <div class="col-lg-4">
         <img class="thumbnail" src="{{product.imageURL}}">
