@@ -2,9 +2,29 @@ from django.shortcuts import render
 from django.http import JsonResponse
 import json
 import datetime
-
+from django.contrib.auth.forms import UserCreationForm
+from .forms import CreateUserForm
 from . models import *
 from .utils import *
+
+def registerPage(request):
+    form = CreateUserForm()
+
+    if request.method == 'POST':
+        print("Received data")
+        form = CreateUserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            print("Info Saved")
+        else: print("Form invalid")
+
+    context = {'form': form}
+    return render(request, 'store/register.html', context)
+
+def loginPage(request):
+    context = {}
+    return render(request, 'store/login.html', context)
+
 
 def store(request):
     data = cartData(request)

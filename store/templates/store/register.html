@@ -1,0 +1,223 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+
+<style>
+.divider-text {
+    position: relative;
+    text-align: center;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+.divider-text span {
+    padding: 7px;
+    font-size: 12px;
+    position: relative;
+    z-index: 2;
+}
+.divider-text:after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    border-bottom: 1px solid #ddd;
+    top: 55%;
+    left: 0;
+    z-index: 1;
+}
+
+.btn-facebook {
+    background-color: #405D9D;
+    color: #fff;
+}
+.btn-twitter {
+    background-color: #42AEEC;
+    color: #fff;
+}
+</style>
+
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">Navbar</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Features</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Pricing</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled" href="#">Disabled</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+
+<div class="card bg-light">
+<article class="card-body mx-auto" style="max-width: 400px;">
+	<h4 class="card-title mt-3 text-center">Create Account</h4>
+
+
+	<p class="text-center">Get started with your free account</p>
+	<p>
+		<a href="" class="btn btn-block btn-twitter"> <i class="fab fa-twitter"></i>   Login via Twitter</a>
+		<a href="" class="btn btn-block btn-facebook"> <i class="fab fa-facebook-f"></i>   Login via facebook</a>
+	</p>
+	<p class="divider-text">
+        <span class="bg-light">OR</span>
+    </p>
+
+
+
+	<form action="" method="POST">
+    {% csrf_token %}
+
+	<div class="form-group input-group">
+		<div class="input-group-prepend">
+		    <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+		 </div>
+        {{form.first_name}}
+    </div> <!-- form-group// -->
+
+
+
+    <div class="form-group input-group">
+		<div class="input-group-prepend">
+		    <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+		 </div>
+        {{form.username}}
+    </div> <!-- form-group// -->
+
+
+
+    <div class="form-group input-group">
+    	<div class="input-group-prepend">
+		    <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
+		 </div>
+        {{form.email}}
+    </div> <!-- form-group// -->
+
+
+<!--    <div class="form-group input-group">-->
+<!--    	<div class="input-group-prepend">-->
+<!--		    <span class="input-group-text"> <i class="fa fa-phone"></i> </span>-->
+<!--		</div>-->
+<!--		<select class="custom-select" style="max-width: 120px;">-->
+<!--		    <option selected="">+880</option>-->
+<!--		    <option value="1">+972</option>-->
+<!--		    <option value="2">+198</option>-->
+<!--		    <option value="3">+701</option>-->
+<!--		</select>-->
+<!--    	<input name="" class="form-control" placeholder="Phone number" type="text">-->
+<!--    </div> &lt;!&ndash; form-group// &ndash;&gt;-->
+
+
+<!--    <div class="form-group input-group">-->
+<!--    	<div class="input-group-prepend">-->
+<!--		    <span class="input-group-text"> <i class="fa fa-building"></i> </span>-->
+<!--		</div>-->
+<!--		<select class="form-control">-->
+<!--			<option selected=""> Select job type</option>-->
+<!--			<option>Student</option>-->
+<!--			<option>Housewife</option>-->
+<!--            <option>Baccha Party</option>-->
+<!--            <option>Tired Husband</option>-->
+<!--            <option>BTS Weirdo</option>-->
+
+<!--		</select>-->
+<!--	</div> &lt;!&ndash; form-group end.// &ndash;&gt;-->
+
+
+    <div class="form-group input-group">
+    	<div class="input-group-prepend">
+		    <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+		</div>
+        {{form.password1}}
+    </div> <!-- form-group// -->
+
+
+    <div class="form-group input-group">
+    	<div class="input-group-prepend">
+		    <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+		</div>
+        {{form.password2}}
+    </div> <!-- form-group// -->
+
+
+    <div class="form-group">
+        <button type="submit" name="Create User" class="btn btn-primary btn-block"> Create Account  </button>
+    </div> <!-- form-group// -->
+
+
+    <p class="text-center">Have an account? <a href="{% url 'loginPage' %}">Log In</a> </p>
+</form>
+</article>
+</div> <!-- card.// -->
+
+</div>
+<!--container end.//-->
+
+<script>
+    var element2 = document.getElementById("id_password2");
+    element2.classList.add("form-control");
+    element2.placeholder = "Confirm Password";
+
+    var element1 = document.getElementById("id_password1");
+    element1.placeholder = "Type Password";
+    element1.classList.add("form-control");
+
+    var element3 = document.getElementById("id_first_name");
+    element3.classList.add("form-control");
+    element3.placeholder = "Full Name";
+
+
+    var element5 = document.getElementById("id_email");
+    element5.classList.add("form-control");
+    element5.placeholder = "Email";
+
+    var element6 = document.getElementById("id_username");
+    element6.classList.add("form-control");
+    element6.placeholder = "Username";
+
+
+
+</script>
+
+
+
+<!--<form method="POST" action="">-->
+<!--    {% csrf_token %}-->
+
+<!--    {{form.first_name.label}}-->
+<!--    {{form.first_name}}-->
+
+<!--    {{form.last_name.label}}-->
+<!--    {{form.last_name}}-->
+
+<!--    {{form.username.label}}-->
+<!--    {{form.username}}-->
+
+<!--    {{form.email.label}}-->
+<!--    {{form.email}}-->
+
+<!--    {{form.password1.label}}-->
+<!--    {{form.password1}}-->
+
+<!--    {{form.password2.label}}-->
+<!--    {{form.password2}}-->
+
+
+
+<!--    <input type="submit" name="Create User">-->
+
+<!--</form>-->
