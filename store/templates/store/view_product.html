@@ -116,6 +116,7 @@
         <br>
 {% endfor %}
 
+{% if request.user.is_authenticated %}
 <div class="card">
 <div class="card-header">
 @ {{user.first_name}}
@@ -132,6 +133,9 @@
 
 </div>
 </div>
+{% else %}
+        <div></div>
+{% endif %}
 
     </div>
 
