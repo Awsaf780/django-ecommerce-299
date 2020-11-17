@@ -49,6 +49,11 @@
         height: 50%;
         opacity: 0.5;
     }
+    .comment-box{
+        padding: 10px;
+        height: 5vh;
+        width: 100%;
+    }
 
 
 
@@ -104,11 +109,29 @@
     </div>
     <div class="card-body">
     <h5 class="card-title">{{review.review}}</h5>
-    <p class="card-text">{{review.date_added}}</p>
+    <p class="card-text">{{review.date_added}}</p><br>
+    <h5>Automatic Rating: <bold>{{review.rating|floatformat:0}}</bold></h5>
     </div>
     </div>
         <br>
 {% endfor %}
+
+<div class="card">
+<div class="card-header">
+@ {{user.first_name}}
+</div>
+<div class="card-body">
+<h5 class="card-title">Leave a review</h5>
+
+    <form action="" method="post">
+        {%csrf_token%}
+        {{form.review}}
+        <input type="submit" name="Submit">
+    </form>
+
+
+</div>
+</div>
 
     </div>
 
@@ -116,6 +139,11 @@
 </div>
 
 
+<script>
+    var x = document.getElementById('id_review');
+    x.classList.add('comment-box');
+    x.placeholder = "Did you like the product? "
+</script>
 
 
 <!--<img src="{{product.imageURL}}" alt="" style="height: 400px">-->
