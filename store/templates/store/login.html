@@ -1,10 +1,153 @@
 <!DOCTYPE html>
+{% load static %}
+<!-- saved from url=(0047)https://colorlib.com/etc/lf/Login_v5/index.html -->
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Login V5</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'login/bootstrap.min.css' %}">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'login/font-awesome.min.css' %}">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'login/icon-font.min.css' %}">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'login/animate.css' %}">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'login/hamburgers.min.css' %}">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'login/animsition.min.css' %}">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'login/select2.min.css' %}">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'login/daterangepicker.css' %}">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'login/util.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'login/main.css' %}">
+
 </head>
 <body>
-<h1>Login</h1>
+
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="{% url 'store' %}">Navbar</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Features</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Pricing</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled" href="#">Disabled</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+
+
+<div class="limiter">
+    <div class="container-login100" style="background-image: url(&#39;images/bg-01.jpg&#39;);">
+        <div class="wrap-login100 p-l-110 p-r-110 p-t-62 p-b-33">
+
+
+
+
+
+			<form class="login100-form validate-form flex-sb flex-w" method="post" action="">
+			{% csrf_token %}
+
+
+				<span class="login100-form-title p-b-53">
+Sign In With
+</span>
+                <a href="https://colorlib.com/etc/lf/Login_v5/index.html#" class="btn-face m-b-20">
+                    <i class="fa fa-facebook-official"></i>
+                    Facebook
+                </a>
+                <a href="https://colorlib.com/etc/lf/Login_v5/index.html#" class="btn-google m-b-20">
+                    <img src="./Login V5_files/icon-google.webp" alt="GOOGLE">
+                    Google
+                </a>
+                <div class="p-t-31 p-b-9">
+<span class="txt1">
+Username
+</span>
+                </div>
+                <div class="wrap-input100 validate-input" data-validate="Username is required">
+                    <input class="input100" type="text" name="username">
+                    <span class="focus-input100"></span>
+                </div>
+                <div class="p-t-13 p-b-9">
+<span class="txt1">
+Password
+</span>
+                    <a href="#" class="txt2 bo1 m-l-5">
+                        Forgot?
+                    </a>
+                </div>
+                <div class="wrap-input100 validate-input" data-validate="Password is required">
+                    <input class="input100" type="password" name="pass">
+                    <span class="focus-input100"></span>
+                </div>
+                <div class="container-login100-form-btn m-t-17">
+                    <button class="login100-form-btn">
+                        Sign In
+                    </button>
+                </div>
+
+				<p>{{error}}</p>
+
+                <div class="w-full text-center p-t-55">
+<span class="txt2">
+Not a member?
+</span>
+                    <a href="{% url 'registerPage' %}" class="txt2 bo1">
+                        Sign up now
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div id="dropDownSelect1"></div>
+
+<script src="{% static '' %}login/jquery-3.2.1.min.js.download"></script>
+
+<script src="{% static '' %}login/animsition.min.js.download"></script>
+
+<script src="{% static '' %}login/popper.js.download"></script>
+<script src="{% static '' %}login/bootstrap.min.js.download"></script>
+
+<script src="{% static '' %}login/select2.min.js.download"></script>
+
+<script src="{% static '' %}login/moment.min.js.download"></script>
+<script src="{% static '' %}login/daterangepicker.js.download"></script>
+
+<script src="{% static '' %}login/countdowntime.js.download"></script>
+
+<script src="{% static '' %}login/main.js.download"></script>
+
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-23581568-13"></script>
+<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'UA-23581568-13');
+
+</script>
+
+
 </body>
 </html>

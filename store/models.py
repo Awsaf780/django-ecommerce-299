@@ -15,6 +15,8 @@ class Customer(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=200)
+    slug = models.CharField(max_length=200, null=True, blank=True)
+    description = models.TextField(default="")
     price = models.DecimalField(max_digits=7, decimal_places=2)
     digital = models.BooleanField(default=False, null=True, blank=False)
     image = models.ImageField(null=True, blank=True)
@@ -87,3 +89,13 @@ class ShippingAddress(models.Model):
         return self.address
 
 
+class Sentiment(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True)
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, blank=True, null=True)
+    review = models.TextField()
+    score = models.FloatField(default=0.0)
+    rating = models.FloatField(default=0.0)
+    date_added = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.review

@@ -26,6 +26,8 @@
                 <div style="flex: 1"><strong>Price</strong></div>
                 <div style="flex: 1"><strong>Quantity</strong></div>
                 <div style="flex: 1"><strong>Total</strong></div>
+                <div style="flex: 0.1"><strong></strong></div>
+
             </div>
 
             {% for item in items %}
@@ -41,7 +43,12 @@
 
                     </div>
                 </div>
+
                 <div style="flex: 1">${{item.get_total}}</div>
+                <div style="flex: 0.1">
+                    <img data-product="{{item.product.id}}" data-action="cancel" src="{% static 'images/cancel.png' %}" class="chg-quantity update-cart">
+                </div>
+
             </div>
             {% endfor %}
 

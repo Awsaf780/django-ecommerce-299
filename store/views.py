@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import JsonResponse
 import json
 import datetime
@@ -7,24 +7,79 @@ from .forms import CreateUserForm
 from . models import *
 from .utils import *
 
+from django.contrib.auth import authenticate, login, logout
+
+from django.contrib import messages
+
+from django.contrib.auth.decorators import login_required
+
+
+def view_product(request, slug):
+    context = {}
+
+    product = Product.objects.get(slug=slug)
+    reviews = Sentiment.objects.filter(product=product)
+    context = {'product': product, 'reviews': reviews}
+
+    return render(request, 'store/view_product.html', context)
+
+
 def registerPage(request):
     form = CreateUserForm()
 
     if request.method == 'POST':
-        print("Received data")
         form = CreateUserForm(request.POST)
         if form.is_valid():
             form.save()
-            print("Info Saved")
-        else: print("Form invalid")
+
+            username = form.cleaned_data.get('username')
+            user = User.objects.get(username=username)
+
+            name = form.cleaned_data.get('first_name')
+            email = form.cleaned_data.get('email')
+            password = form.cleaned_data.get('password1')
+
+            Customer.objects.create(
+                user = user,
+                name = name,
+                email = email,
+            )
+            print("Customer created")
+
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('store')
+            else:
+                # messages.success(request, "Account Created Successfully, " + user)
+                return redirect('loginPage')
 
     context = {'form': form}
     return render(request, 'store/register.html', context)
 
 def loginPage(request):
     context = {}
+
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('pass')
+
+        # print(username, password)
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('store')
+        else:
+            messages.info(request, 'Incorrect Username or Password')
+            context = {'error': 'Incorrect username or password'}
+
     return render(request, 'store/login.html', context)
 
+
+def logoutUser(request):
+    logout(request)
+    return redirect('store')
 
 def store(request):
     data = cartData(request)
@@ -43,7 +98,7 @@ def cart(request):
     context = {'items': items, 'order': order, 'cartItems': cartItems}
     return render(request, 'store/cart.html', context)
 
-
+# @login_required(login_url='loginPage')
 def checkout(request):
     data = cartData(request)
     order = data['order']
@@ -74,6 +129,8 @@ def updateItem(request):
         orderItem.quantity += 1
     elif action == 'remove':
         orderItem.quantity -= 1
+    elif action == 'cancel':
+        orderItem.quantity = 0
 
     orderItem.save()
 
@@ -114,3 +171,8 @@ def processOrder(request):
 
 
     return JsonResponse('Payment Complete', safe=False)
+
+
+def dashboard(request):
+    context = {}
+    return render(request, 'store/dashboard.html', context)
