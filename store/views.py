@@ -4,7 +4,7 @@ import json
 import datetime
 from django.contrib.auth.forms import UserCreationForm
 from .forms import CreateUserForm, SentimentForm
-from . models import *
+from .models import *
 from .utils import *
 
 from django.contrib.auth import authenticate, login, logout
@@ -12,6 +12,12 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 
 from django.contrib.auth.decorators import login_required
+
+
+def profile(request):
+    context = {}
+
+    return render(request, 'store/profile.html', context)
 
 
 def view_product(request, slug):
@@ -60,9 +66,9 @@ def registerPage(request):
             password = form.cleaned_data.get('password1')
 
             Customer.objects.create(
-                user = user,
-                name = name,
-                email = email,
+                user=user,
+                name=name,
+                email=email,
             )
             print("Customer created")
 
@@ -76,6 +82,7 @@ def registerPage(request):
 
     context = {'form': form}
     return render(request, 'store/register.html', context)
+
 
 def loginPage(request):
     context = {}
@@ -101,6 +108,7 @@ def logoutUser(request):
     logout(request)
     return redirect('store')
 
+
 def store(request):
     data = cartData(request)
     cartItems = data['cartItems']
@@ -108,6 +116,7 @@ def store(request):
     products = Product.objects.all()
     context = {'products': products, 'cartItems': cartItems}
     return render(request, 'store/store.html', context)
+
 
 def cart(request):
     data = cartData(request)
@@ -117,6 +126,7 @@ def cart(request):
 
     context = {'items': items, 'order': order, 'cartItems': cartItems}
     return render(request, 'store/cart.html', context)
+
 
 # @login_required(login_url='loginPage')
 def checkout(request):
@@ -128,7 +138,9 @@ def checkout(request):
     context = {'items': items, 'order': order, 'cartItems': cartItems}
     return render(request, 'store/checkout.html', context)
 
+
 from django.views.decorators.csrf import csrf_exempt
+
 
 @csrf_exempt
 def updateItem(request):
@@ -157,6 +169,7 @@ def updateItem(request):
     if orderItem.quantity <= 0:
         orderItem.delete()
     return JsonResponse('Item was added', safe=False)
+
 
 # from django.views.decorators.csrf import csrf_exempt
 #
@@ -189,7 +202,6 @@ def processOrder(request):
             zipcode=data['shipping']['zipcode'],
         )
 
-
     return JsonResponse('Payment Complete', safe=False)
 
 
@@ -198,13 +210,10 @@ def dashboard(request):
     return render(request, 'store/dashboard.html', context)
 
 
-
 ############ All custom Functions
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
-
-
 
 stopword_list = stopwords.words('english')
 
@@ -222,6 +231,7 @@ def list_to_string(word_list):
         sentence += "{} ".format(word)
 
     return sentence
+
 
 def sentiment_analyse(text):
     text = text.lower()
@@ -243,9 +253,9 @@ def sentiment_analyse(text):
     if pos > neg:
         result = pos
     elif pos < neg:
-        result = neg*-1
+        result = neg * -1
     else:
-        result = neu*0
+        result = neu * 0
 
     return result
 

@@ -19,7 +19,28 @@ class Product(models.Model):
     description = models.TextField(default="")
     price = models.DecimalField(max_digits=7, decimal_places=2)
     digital = models.BooleanField(default=False, null=True, blank=False)
+
+    CAT_CHOICES = (
+        ('Apparel-men', 'Apparel-men'),
+        ('Apparel-women', 'Apparel-women'),
+        ('Apparel-kids', 'Apparel-kids'),
+
+        ('Electronics-smartphone', 'Electronics-smartphone'),
+        ('Electronics-accessory', 'Electronics-accessory'),
+        ('Electronics-computer', 'Electronics-computer'),
+
+        ('Fashion-footwear', 'Fashion-footwear'),
+        ('Fashion-watch', 'Fashion-watch'),
+        ('Fashion-accessory', 'Fashion-accessory'),
+        ('Fashion-cosmetic', 'Fashion-cosmetic'),
+
+        ('Misc', 'Misc'),
+
+    )
+
+    category = models.CharField(max_length=200, choices=CAT_CHOICES, blank=True, null=True, default="")
     image = models.ImageField(null=True, blank=True)
+
 
     def __str__(self):
         return self.name
