@@ -49,7 +49,8 @@ def view_product(request, slug):
         form = SentimentForm(request.POST)
         if form.is_valid():
             review = form.cleaned_data.get('review')
-            customer = Customer.objects.get(user=request.user)
+            # customer = User.objects.get(user=request.user)
+            customer = request.user
 
             score = sentiment_analyse(review)
             rating = sentiment_score_to_rating(score)
@@ -78,18 +79,18 @@ def registerPage(request):
             form.save()
 
             username = form.cleaned_data.get('username')
-            user = User.objects.get(username=username)
-
-            name = form.cleaned_data.get('first_name')
-            email = form.cleaned_data.get('email')
+            # user = User.objects.get(username=username)
+            #
+            # name = form.cleaned_data.get('first_name')
+            # email = form.cleaned_data.get('email')
             password = form.cleaned_data.get('password1')
 
-            Customer.objects.create(
-                user=user,
-                name=name,
-                email=email,
-            )
-            print("Customer created")
+            # Customer.objects.create(
+            #     user=user,
+            #     name=name,
+            #     email=email,
+            # )
+            # print("Customer created")
 
             user = authenticate(request, username=username, password=password)
             if user is not None:
@@ -170,7 +171,7 @@ def updateItem(request):
     print('Action: ', action)
     print('Product Id: ', productId)
 
-    customer = request.user.customer
+    customer = request.user
     product = Product.objects.get(id=productId)
     order, created = Order.objects.get_or_create(customer=customer, complete=False)
 
@@ -198,7 +199,7 @@ def processOrder(request):
     data = json.loads(request.body)
 
     if request.user.is_authenticated:
-        customer = request.user.customer
+        customer = request.user
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
 
     else:
