@@ -27,15 +27,15 @@
 						<div class="form-field">
 							<input class="form-control" type="text" name="city" placeholder="City..">
 						</div>
-						<div class="form-field">
-							<input class="form-control" type="text" name="state" placeholder="State..">
-						</div>
-						<div class="form-field">
-							<input class="form-control" type="text" name="zipcode" placeholder="Zip code..">
-						</div>
-						<div class="form-field">
-							<input class="form-control" type="text" name="country" placeholder="Zip code..">
-						</div>
+<!--						<div class="form-field">-->
+<!--							<input class="form-control" type="text" name="state" placeholder="State..">-->
+<!--						</div>-->
+<!--						<div class="form-field">-->
+<!--							<input class="form-control" type="text" name="zipcode" placeholder="Zip code..">-->
+<!--						</div>-->
+<!--						<div class="form-field">-->
+<!--							<input class="form-control" type="text" name="country" placeholder="Zip code..">-->
+<!--						</div>-->
 					</div>
 
 					<hr>
@@ -119,15 +119,11 @@
 		var shippingInfo = {
 			'address': null,
 			'city': null,
-			'state': null,
-			'zipcode': null,
 		}
 
 		if(shipping != 'False'){
 			shippingInfo.address = form.address.value
 			shippingInfo.city = form.city.value
-			shippingInfo.state = form.state.value
-			shippingInfo.zipcode = form.zipcode.value
 
 		}
 
