@@ -23,6 +23,9 @@ urlpatterns = [
     path('', include('store.urls')),
     path('accounts/', include('allauth.urls')),
 
+    # rest framework urls
+    path('api/', include('store.api.urls', 'store_api')),
+
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

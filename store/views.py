@@ -10,6 +10,7 @@ from .utils import *
 from django.contrib.auth import authenticate, login, logout
 
 from django.contrib import messages
+import requests
 
 from django.contrib.auth.decorators import login_required
 
@@ -19,6 +20,24 @@ def profile(request):
 
     return render(request, 'store/profile.html', context)
 
+
+# def test(request, url):
+#     context = {}
+#
+#     r = requests.get('http://127.0.0.1:8000/api/product/list')
+#     data = r.json()
+#
+#     next = data['next']
+#
+#     count = data['count']
+#     products = data['results']
+#     context = {'count': count, 'products': products, 'next': next}
+#
+#
+#     print(context)
+#
+#     return render(request, "store/dashboard.html", context)
+#
 
 def view_product(request, slug):
     context = {}
@@ -205,11 +224,6 @@ def processOrder(request):
     return JsonResponse('Payment Complete', safe=False)
 
 
-def dashboard(request):
-    context = {}
-    return render(request, 'store/dashboard.html', context)
-
-
 ############ All custom Functions
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from nltk.tokenize import word_tokenize
@@ -261,10 +275,10 @@ def sentiment_analyse(text):
 
 
 def sentiment_score_to_rating(score):
-    rating_1 = -0.6
+    rating_1 = -0.8
     rating_2 = -0.2
     rating_4 = 0.2
-    rating_5 = 0.6
+    rating_5 = 0.8
 
     if score == 0:
         rating = 0
