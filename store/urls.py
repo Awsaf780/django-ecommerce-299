@@ -16,6 +16,6 @@ urlpatterns = [
     path('product/<slug>', views.view_product, name='view_product'),
     path('accounts/profile/', views.profile, name='profile'),
 
-    # path('test/', views.test, name='test'),
+    path('test/', views.test, name='test'),
 
 ]

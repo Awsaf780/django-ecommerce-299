@@ -9,6 +9,8 @@
 
     <title>eCommerce</title>
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/loadingio/transition.css@v2.0.0/dist/transition.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/loadingio/transition.css@v2.0.0/dist/transition.min.css">
     <script>
         var user = '{{request.user}}'
 
@@ -52,6 +54,62 @@
     </script>
 
     <style>
+
+<!--body {-->
+<!--    overflow: hidden;-->
+<!--}-->
+
+#loader {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
+  width: 150px;
+  height: 150px;
+  margin: -75px 0 0 -75px;
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid var(--main-bg);
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Add animation to "page content" */
+.animate-bottom {
+  position: relative;
+  -webkit-animation-name: animatebottom;
+  -webkit-animation-duration: 1s;
+  animation-name: animatebottom;
+  animation-duration: 1s
+}
+
+@-webkit-keyframes animatebottom {
+  from { bottom:-100px; opacity:0 }
+  to { bottom:0px; opacity:1 }
+}
+
+@keyframes animatebottom {
+  from{ bottom:-100px; opacity:0 }
+  to{ bottom:0; opacity:1 }
+}
+
+#myDiv {
+  display: none;
+}
+
+
         @media only screen and (min-width: 990px) {
             .navbar {
                 padding: 15px 200px;
@@ -61,7 +119,7 @@
     </style>
 </head>
 
-<body>
+
 
 
 <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
@@ -118,8 +176,8 @@ Hello {{request.user}}
     </div>
 </nav>
 
-
-
+<!--<body onload="myFunction()">-->
+<body>
 <!--<div class="form-inline mob-cart-float">-->
 <!--    <a href="{% url 'cart' %}">-->
 <!--        <img src="{% static 'images/cart.svg' %}" id="cart-icon-mob">-->
@@ -127,10 +185,28 @@ Hello {{request.user}}
 <!--    <p id="cart-total-mob">{{cartItems}}</p>-->
 <!--</div>-->
 
-<div class="container">
+
+<!--<div id="loader"></div>-->
+
+<!--<div style="display:none;" id="myDiv" class="animate-bottom">-->
+<div>
     {% block content %}
     {% endblock content%}
 </div>
+
+<!--<script>-->
+<!--var myVar;-->
+
+<!--function myFunction() {-->
+<!--  myVar = setTimeout(showPage, 500);-->
+<!--}-->
+
+<!--function showPage() {-->
+<!--  document.getElementById("loader").style.display = "none";-->
+<!--  document.getElementById("myDiv").style.display = "block";-->
+<!--}-->
+<!--</script>-->
+
 
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
@@ -143,6 +219,7 @@ Hello {{request.user}}
         integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s"
         crossorigin="anonymous"></script>
 <script src="{% static 'js/cart.js' %}"></script>
+
 
 
 </body>

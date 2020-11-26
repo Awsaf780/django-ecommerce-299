@@ -26,28 +26,52 @@
   animation: fadein 0.5s, fadeout 0.5s 2.5s;
 }
 
-<!--@-webkit-keyframes fadein {-->
-<!--  from {bottom: 0; opacity: 0;}-->
-<!--  to {bottom: 30px; opacity: 1;}-->
-<!--}-->
+.all-products {
+    width: 70%;
+    margin: 1% 4% 5% auto;
+}
+.category {
+    width: 20%;
+    margin: 2% auto 2% 1%;
+    position: fixed;
+    z-index: 1;
+    background: #eee;
+    overflow-x: hidden;
+    padding: 20px 10px;
+}
 
-<!--@keyframes fadein {-->
-<!--  from {bottom: 0; opacity: 0;}-->
-<!--  to {bottom: 30px; opacity: 1;}-->
-<!--}-->
+.category a {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 18px;
+  color: #2196F3;
+  display: block;
+}
+.category h3 {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 22px;
+  display: block;
+}
 
-<!--@-webkit-keyframes fadeout {-->
-<!--  from {bottom: 30px; opacity: 1;}-->
-<!--  to {bottom: 0; opacity: 0;}-->
-<!--}-->
-
-<!--@keyframes fadeout {-->
-<!--  from {bottom: 30px; opacity: 1;}-->
-<!--  to {bottom: 0; opacity: 0;}-->
-<!--}-->
+.category a:hover {
+  color: #064579;
+}
 </style>
 
-<div class="row">
+<div class="category">
+    <h3>Categories</h3>
+  <a href="#about">About</a>
+  <a href="#services">Services</a>
+  <a href="#clients">Clients</a>
+  <a href="#contact">Contact</a>
+</div>
+
+</div>
+
+<div class="all-products">
+
+    <div class="row">
 
 <div class="form-inline mob-cart-float">
     <a href="{% url 'cart' %}">
@@ -57,33 +81,27 @@
 </div>
 
 
-
-
     {% for product in products %}
     <div class="col-lg-4">
         <img class="thumbnail" src="{{product.imageURL}}">
         <div class="box-element product">
             <h6><strong>{{product.name}}</strong></h6>
             <hr>
-            <button data-product="{{product.id}}" data-action="add" class="btn add-btn update-cart" onclick="cartSnack()">Add to Cart</button>
+            <button style="color: white;" data-product="{{product.id}}" data-action="add" class="btn add-btn update-cart" onclick="cartSnack()">Add to Cart</button>
             <a href="product/{{product.slug}}" class="btn btn-secondary">View</a>
             <h4 style="display: inline-block; float: right;">${{product.price|floatformat:2}}</h4>
         </div>
     </div>
     {% endfor %}
 
-<!--{% load el_pagination_tags %}-->
-
-<!--{% paginate products %}-->
-<!--{% for product in products %}-->
-<!-- <h1>{{product.name}}</h1><br>-->
-<!--{% endfor %}-->
-<!--{% show_pages %}-->
 
 
 <div id="snackbar">Added!</div>
 
 </div>
+
+</div>
+
 <script>
     function cartSnack() {
         var x = document.getElementById("snackbar");
@@ -91,6 +109,9 @@
         setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
     }
 </script>
+
+
+
 
 {% endblock content %}
 

@@ -21,27 +21,30 @@ def profile(request):
     return render(request, 'store/profile.html', context)
 
 
-# def test(request, url):
-#     context = {}
-#
-#     r = requests.get('http://127.0.0.1:8000/api/product/list')
-#     data = r.json()
-#
-#     next = data['next']
-#
-#     count = data['count']
-#     products = data['results']
-#     context = {'count': count, 'products': products, 'next': next}
-#
-#
-#     print(context)
-#
-#     return render(request, "store/dashboard.html", context)
-#
+def test(request, url):
+    context = {}
+
+    r = requests.get('http://127.0.0.1:8000/api/product/list')
+    data = r.json()
+
+    next = data['next']
+
+    count = data['count']
+    products = data['results']
+    context = {'count': count, 'products': products, 'next': next}
+
+
+    print(context)
+
+    return render(request, "store/dashboard.html", context)
+
 
 def view_product(request, slug):
-    context = {}
+    data = cartData(request)
+    cartItems = data['cartItems']
+
     product = Product.objects.get(slug=slug)
+
 
     form = SentimentForm()
 
@@ -65,7 +68,8 @@ def view_product(request, slug):
             form = SentimentForm()
 
     reviews = Sentiment.objects.filter(product=product)
-    context = {'product': product, 'reviews': reviews, 'form': form}
+    context = {'product': product, 'reviews': reviews, 'form': form, 'cartItems': cartItems}
+
 
     return render(request, 'store/view_product.html', context)
 
@@ -228,14 +232,14 @@ from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 
-stopword_list = stopwords.words('english')
-
+# stopword_list = stopwords.words('english')
+stopword_list = ['the', 'a', 'I', 'am', 'have', 'is', 'they', 'their', 'should']
 # stopword_list.append('die')
-stopword_list.append('carbonara')
-stopword_list.append('cheese')
-stopword_list.append('ramen')
-stopword_list.append('stew')
-stopword_list.append("'ve")
+# stopword_list.append('carbonara')
+# stopword_list.append('cheese')
+# stopword_list.append('ramen')
+# stopword_list.append('stew')
+# stopword_list.append("'ve")
 
 
 def list_to_string(word_list):
@@ -298,3 +302,15 @@ def sentiment_score_to_rating(score):
         rating = 3
 
     return rating
+
+
+
+###################################
+
+def test(request):
+
+    product = Product.objects.all()
+
+    context = {'products': product}
+
+    return render(request, 'store/test_hasan.html', context)
