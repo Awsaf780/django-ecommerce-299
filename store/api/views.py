@@ -89,3 +89,14 @@ class ApiProductListView(ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     pagination_class = PageNumberPagination
+
+
+class ApiCategoryListView(ListAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    pagination_class = PageNumberPagination
+
+    def get_queryset(self, *args, **kwargs):
+        return Product.objects.filter(category=self.kwargs['slug'])
+
+

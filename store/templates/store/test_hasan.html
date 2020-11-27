@@ -1,13 +1,148 @@
+{% extends 'store/main.html' %}
 
-
+{% load static %}
 
 {% block content %}
+<style>
+#snackbar {
+  visibility: hidden;
+  min-width: 250px;
+  margin-left: -125px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 2px;
+  padding: 16px;
+  position: fixed;
+  z-index: 1;
+  left: 50%;
+  bottom: 30px;
+  font-size: 17px;
+}
 
-<h1>{{request.user.email}}</h1>
+#snackbar.show {
+  visibility: visible;
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+.all-products {
+    width: 70%;
+    margin: 1% 4% 5% auto;
+}
+.category {
+    width: 20%;
+    margin: 2% auto 2% 1%;
+    position: fixed;
+    z-index: 1;
+    background: #eee;
+    overflow-x: hidden;
+    padding: 20px 10px;
+}
+
+.category a {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 18px;
+  color: #2196F3;
+  display: block;
+}
+.category h3 {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 22px;
+  display: block;
+}
+
+.category a:hover {
+  color: #064579;
+}
+</style>
+
+<div class="category">
+    <h3>Categories</h3>
+
+    <a href="/products">All API Products</a>
+
+    <a href="/products/category/Apparel-men">Clothes</a>
+    <a href="/products/category/Fashion-accessory">Accessories</a>
+    <a href="/products/category/Fashion-footwear">Shoes</a>
+    <a href="/products/category/Misc">Misc</a>
+
+</div>
+
+</div>
+
+<div class="all-products">
+
+    <div class="row">
+
+<div class="form-inline mob-cart-float">
+    <a href="{% url 'cart' %}">
+        <img src="{% static 'images/cart.svg' %}" id="cart-icon-mob">
+    </a>
+    <p id="cart-total-mob">{{cartItems}}</p>
+</div>
+
+{% if error %}
+    <h1>{{error}}</h1>
+
+    {% else %}
+
 
     {% for product in products %}
-        <h1>{{product.name}}</h1>
-
+    <div class="col-lg-4">
+        <img class="thumbnail" src="{{product.image}}">
+        <div class="box-element product">
+            <h6><strong>{{product.name}}</strong></h6>
+            <hr>
+            <button style="color: white;" data-product="{{product.id}}" data-action="add" class="btn add-btn update-cart" onclick="cartSnack()">Add to Cart</button>
+            <a href="/product/{{product.slug}}" class="btn btn-secondary">View</a>
+            <h4 style="display: inline-block; float: right;">${{product.price|floatformat:2}}</h4>
+        </div>
+    </div>
     {% endfor %}
 
-{% endblock %}
+
+
+
+
+<div id="snackbar">Added!</div>
+
+</div>
+
+
+
+<div class="pagination-box" style="margin: 30px auto; display: flex; justify-content: center; align-items: center;">
+<span>
+{% if previous_page is None %}
+        <button type="button" class="btn btn-primary disabled">Previous</button>
+{% else %}
+        <button type="button" class="btn btn-primary"><a style="color: white" href="/{{uri_context}}/{{previous_page}}">Previous</a></button>
+{% endif %}
+
+{% if next_page is None %}
+    <button type="button" class="btn btn-primary disabled">Next</button>
+{% else %}
+    <button type="button" class="btn btn-primary"><a style="color: white" href="/{{uri_context}}/{{next_page}}">Next</a></button>
+{% endif %}
+</span>
+</div>
+
+
+</div>
+{% endif %}
+<script>
+    function cartSnack() {
+        var x = document.getElementById("snackbar");
+        x.className = "show";
+        setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+    }
+</script>
+
+
+
+
+{% endblock content %}
+
+

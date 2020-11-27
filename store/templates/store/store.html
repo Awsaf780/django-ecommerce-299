@@ -61,10 +61,14 @@
 
 <div class="category">
     <h3>Categories</h3>
-  <a href="#about">About</a>
-  <a href="#services">Services</a>
-  <a href="#clients">Clients</a>
-  <a href="#contact">Contact</a>
+
+    <a href="/">All Products</a>
+
+    <a href="/category/Apparel-men">Clothes</a>
+    <a href="/category/Fashion-accessory">Accessories</a>
+    <a href="/category/Fashion-footwear">Shoes</a>
+    <a href="/category/Misc">Misc</a>
+
 </div>
 
 </div>
@@ -88,7 +92,7 @@
             <h6><strong>{{product.name}}</strong></h6>
             <hr>
             <button style="color: white;" data-product="{{product.id}}" data-action="add" class="btn add-btn update-cart" onclick="cartSnack()">Add to Cart</button>
-            <a href="product/{{product.slug}}" class="btn btn-secondary">View</a>
+            <a href="/product/{{product.slug}}" class="btn btn-secondary">View</a>
             <h4 style="display: inline-block; float: right;">${{product.price|floatformat:2}}</h4>
         </div>
     </div>

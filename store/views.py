@@ -14,6 +14,7 @@ import requests
 
 from django.contrib.auth.decorators import login_required
 
+domain = 'http://127.0.0.1:8000'
 
 def profile(request):
     context = {}
@@ -21,22 +22,7 @@ def profile(request):
     return render(request, 'store/profile.html', context)
 
 
-def test(request, url):
-    context = {}
 
-    r = requests.get('http://127.0.0.1:8000/api/product/list')
-    data = r.json()
-
-    next = data['next']
-
-    count = data['count']
-    products = data['results']
-    context = {'count': count, 'products': products, 'next': next}
-
-
-    print(context)
-
-    return render(request, "store/dashboard.html", context)
 
 
 def view_product(request, slug):
@@ -132,12 +118,118 @@ def logoutUser(request):
     logout(request)
     return redirect('store')
 
+def products(request):
+    page = 1
+    return products_pag(request, page)
+
+def products_pag(request, page):
+    data = cartData(request)
+    cartItems = data['cartItems']
+
+    try:
+        r = requests.get('{}/api/product/list?page={}'.format(domain, page))
+        data = r.json()
+
+        next = data['next']
+        try:
+            next_page = next.replace("{}/api/product/list?page=".format(domain), "")
+        except:
+            next_page = None
+
+        previous = data['previous']
+        try:
+            previous_page = previous.replace("{}/api/product/list?page=".format(domain), "")
+            if(previous_page == '{}/api/product/list'.format(domain)):
+                previous_page = 1
+        except:
+            previous_page = None
+
+        count = data['count']
+
+        products = data['results']
+        uri_context = 'products'
+        context = {
+            'cartItems': cartItems,
+            'count': count,
+            'products': products,
+            'next_page': next_page,
+            'previous_page': previous_page,
+            'uri_context': uri_context,
+        }
+
+
+    except:
+        context = {'error': 'Forbidden'}
+
+
+
+    return render(request, "store/test_hasan.html", context)
+
+def products_category(request, slug):
+    page = 1
+    slug = slug
+    return products_category_pag(request, slug, page)
+
+def products_category_pag(request, slug, page):
+    data = cartData(request)
+    cartItems = data['cartItems']
+
+    try:
+        r = requests.get('{}/api/category/{}?page={}'.format(domain, slug, page))
+        data = r.json()
+
+        next = data['next']
+        try:
+            next_page = next.replace("{}/api/category/{}?page=".format(domain, slug), "")
+        except:
+            next_page = None
+
+        previous = data['previous']
+        try:
+            previous_page = previous.replace("{}/api/category/{}?page=".format(domain, slug), "")
+            if(previous_page == '{}/api/category/{}'.format(domain, slug)):
+                previous_page = 1
+        except:
+            previous_page = None
+
+        count = data['count']
+
+        products = data['results']
+        uri_context = 'products/category/{}'.format(slug)
+        context = {
+            'cartItems': cartItems,
+            'count': count,
+            'products': products,
+            'next_page': next_page,
+            'previous_page': previous_page,
+            'uri_context': uri_context,
+        }
+
+
+    except:
+        context = {'error': 'Forbidden'}
+
+
+
+    return render(request, "store/test_hasan.html", context)
+
+
 
 def store(request):
     data = cartData(request)
     cartItems = data['cartItems']
 
     products = Product.objects.all()
+    context = {'products': products, 'cartItems': cartItems}
+    return render(request, 'store/store.html', context)
+
+
+
+def view_category(request, slug):
+    data = cartData(request)
+    cartItems = data['cartItems']
+
+    products = Product.objects.filter(category=slug)
     context = {'products': products, 'cartItems': cartItems}
     return render(request, 'store/store.html', context)
 
@@ -304,13 +396,3 @@ def sentiment_score_to_rating(score):
     return rating
 
 
-
-###################################
-
-def test(request):
-
-    product = Product.objects.all()
-
-    context = {'products': product}
-
-    return render(request, 'store/test_hasan.html', context)
