@@ -59,6 +59,21 @@
 <!--    overflow: hidden;-->
 <!--}-->
 
+
+.btn-outline-success {
+    color: white;
+    border-color: var(--main-bg);
+    background: var(--main-bg);
+}
+.btn-outline-success:hover {
+    color: var(--main-bg);
+    background: white;
+    border-color: white;
+}
+.navbar-dark .navbar-nav .nav-link {
+    color: rgba(255,255,255,1);
+}
+
 #loader {
   position: absolute;
   left: 50%;
@@ -122,7 +137,7 @@
 
 
 
-<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
 
     <a class="navbar-brand" href="{% url 'store' %}">eCom</a>
 
@@ -136,12 +151,25 @@
             <li class="nav-item active">
                 <a class="nav-link" href="{% url 'products' %}">API Store <span class="sr-only">(current)</span></a>
             </li>
+
+
+            <li style="margin-left: 40vh;">
+<form action="/products?search=" method="get" class="form-inline my-2 my-lg-0">
+
+    <input style="width: 500px;" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search">
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+</form>
+
+            </li>
         </ul>
 
 
 
 
+
         <div class="form-inline my-2 my-lg-0">
+
+
 
 {% if request.user.is_authenticated %}
 
@@ -151,8 +179,13 @@
 Hello {{request.user}}
 </a>
 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+    {% if request.user.username == "admin" %}
+<a class="dropdown-item" href="/admin">Admin Site</a>
+    {% else %}
 <a class="dropdown-item" href="/accounts/profile">Profile</a>
-<a class="dropdown-item" href="#">Settings</a>
+    {% endif %}
+    <a class="dropdown-item" href="#">Settings</a>
 <div class="dropdown-divider"></div>
 <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
 </div>
@@ -168,13 +201,22 @@ Hello {{request.user}}
 
             {% endif %}
 
+
+
+
+
             <a href="{% url 'cart' %}">
                 <img src="{% static 'images/cart.svg' %}" id="cart-icon">
             </a>
             <p id="cart-total">{{cartItems}}</p>
         </div>
     </div>
+
+
+
 </nav>
+
+
 
 <!--<body onload="myFunction()">-->
 <body>

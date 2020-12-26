@@ -112,6 +112,8 @@
 </div>
 
 
+{% if query is None %}
+
 
 <div class="pagination-box" style="margin: 30px auto; display: flex; justify-content: center; align-items: center;">
 <span>
@@ -130,6 +132,30 @@
 </div>
 
 
+
+
+{% else %}
+
+  <div class="pagination-box" style="margin: 30px auto; display: flex; justify-content: center; align-items: center;">
+<span>
+{% if previous_page is None %}
+        <button type="button" class="btn btn-primary disabled">Previous</button>
+{% else %}
+        <button type="button" class="btn btn-primary"><a style="color: white" href="/{{uri_context}}/{{previous_page}}&search={{query}}">Previous</a></button>
+{% endif %}
+
+{% if next_page is None %}
+    <button type="button" class="btn btn-primary disabled">Next</button>
+{% else %}
+    <button type="button" class="btn btn-primary"><a style="color: white" href="/{{uri_context}}/{{next_page}}&search={{query}}">Next</a></button>
+{% endif %}
+</span>
+</div>
+
+    {% endif %}
+
+
+
 </div>
 {% endif %}
 <script>
@@ -141,7 +167,8 @@
 </script>
 
 
-
+<h1>{{previous_page}}</h1>
+<h1>{{next_page}}</h1>
 
 {% endblock content %}
 

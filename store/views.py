@@ -16,12 +16,17 @@ from django.contrib.auth.decorators import login_required
 
 domain = 'http://127.0.0.1:8000'
 
+def get_recommended_quantity():
+    return 3
+
 def profile(request):
-    context = {}
+    data = cartData(request)
+    cartItems = data['cartItems']
+    user = request.user
+
+    context = {'cartItems': cartItems, 'user': user}
 
     return render(request, 'store/profile.html', context)
-
-
 
 
 
@@ -30,7 +35,6 @@ def view_product(request, slug):
     cartItems = data['cartItems']
 
     product = Product.objects.get(slug=slug)
-
 
     form = SentimentForm()
 
@@ -54,8 +58,17 @@ def view_product(request, slug):
             form = SentimentForm()
 
     reviews = Sentiment.objects.filter(product=product)
-    context = {'product': product, 'reviews': reviews, 'form': form, 'cartItems': cartItems}
+    try:
+        recommended = recommend_products(request, product.pk)
+    except:
+        recommended = []
 
+    context = {'product': product,
+               'reviews': reviews,
+               'form': form,
+               'cartItems': cartItems,
+               'recommended_products': recommended,
+               }
 
     return render(request, 'store/view_product.html', context)
 
@@ -118,9 +131,18 @@ def logoutUser(request):
     logout(request)
     return redirect('store')
 
+
 def products(request):
     page = 1
-    return products_pag(request, page)
+
+    if request.method == 'GET':
+        query = request.GET.get('search')
+        if query != None:
+            return search(request, page, query)
+        else:
+            return products_pag(request, 1)
+    else:
+        return products_pag(request, 1)
 
 def products_pag(request, page):
     data = cartData(request)
@@ -139,8 +161,10 @@ def products_pag(request, page):
         previous = data['previous']
         try:
             previous_page = previous.replace("{}/api/product/list?page=".format(domain), "")
-            if(previous_page == '{}/api/product/list'.format(domain)):
+            if (previous_page == '{}/api/product/list'.format(domain)):
                 previous_page = 1
+
+
         except:
             previous_page = None
 
@@ -164,6 +188,56 @@ def products_pag(request, page):
 
 
     return render(request, "store/test_hasan.html", context)
+
+
+def search(request, page, query):
+    data = cartData(request)
+    cartItems = data['cartItems']
+
+    try:
+        r = requests.get('{}/api/product/list?page={}&search={}'.format(domain, page, query))
+        data = r.json()
+
+        next = data['next']
+        try:
+            next_page = next.replace("{}/api/product/list?page=".format(domain), "")
+            next_page = next_page.replace("&search={}".format(query), "")
+
+        except:
+            next_page = None
+
+        previous = str(data['previous'])
+        try:
+            previous_page = previous.replace("{}/api/product/list?search={}".format(domain, query), '1')
+            previous_page = previous_page.replace("{}/api/product/list?page=".format(domain), "")
+            previous_page = previous_page.replace("&search={}".format(page), "")
+
+        except:
+            previous_page = None
+
+        count = data['count']
+
+        products = data['results']
+        uri_context = 'products'
+
+        context = {
+            'cartItems': cartItems,
+            'count': count,
+            'products': products,
+            'next_page': next_page,
+            'previous_page': previous_page,
+            'uri_context': uri_context,
+            'query': query,
+        }
+
+
+    except:
+        context = {'error': 'Forbidden'}
+
+    print(context)
+
+    return render(request, "store/test_hasan.html", context)
+
 
 def products_category(request, slug):
     page = 1
@@ -212,6 +286,7 @@ def products_category_pag(request, slug, page):
 
 
     return render(request, "store/test_hasan.html", context)
+
 
 
 
@@ -396,3 +471,44 @@ def sentiment_score_to_rating(score):
     return rating
 
 
+############### MACHINE LEARNING #######################
+import pandas as pd
+from scipy.sparse import csr_matrix
+from sklearn.neighbors import NearestNeighbors
+
+def recommend_products(request, id):
+    product_id = id
+    quantity = get_recommended_quantity()
+
+    sentiment = pd.DataFrame.from_records(Sentiment.objects.all().values('id', 'product', 'customer', 'rating'))
+
+    df_pivot = sentiment.pivot_table(index='product', columns='customer', values='rating').fillna(0)
+    query_array = df_pivot.loc[product_id].values.reshape(1, -1)
+    matrix = csr_matrix(df_pivot.values)
+
+    model_knn = NearestNeighbors(metric='cosine', algorithm='brute')
+    model_knn.fit(matrix)
+    distances, indices = model_knn.kneighbors(query_array, n_neighbors=quantity + 1)
+
+    recommended = []
+    for i in range(len(distances.flatten())):
+        if i == 0:
+            product_index = indices.flatten()[i]
+        else:
+            index = indices.flatten()[i]
+            recommended.append(df_pivot.index[index])
+
+    recommended_products = []
+    for id in recommended:
+        product = Product.objects.get(id=id)
+        recommended_products.append(product)
+
+    # original = Product.objects.get(id=product_id)
+    # context = {'sentiment': sentiment,
+    #            'product': original,
+    #            'recommended': recommended_products,
+    #            }
+
+    print(recommended_products)
+
+    return recommended_products

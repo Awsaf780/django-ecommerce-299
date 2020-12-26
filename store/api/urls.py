@@ -13,5 +13,7 @@ urlpatterns = [
     path('product/list', ApiProductListView.as_view(), name='product_all'),
     path('category/<slug>', ApiCategoryListView.as_view(), name='category_all'),
 
+    # path('productquery', ApiSearchListView.as_view(), name='search_api'),
+
     path('users/<username>/', api_detail_user_view, name='users'),
 ]

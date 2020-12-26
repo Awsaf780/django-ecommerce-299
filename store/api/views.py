@@ -6,6 +6,8 @@ from django.contrib.auth.models import User
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.generics import ListAPIView
 
+from rest_framework.filters import SearchFilter, OrderingFilter
+
 # from store.models import Product
 from store.api.serializers import *
 
@@ -89,6 +91,8 @@ class ApiProductListView(ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     pagination_class = PageNumberPagination
+    filter_backends = (SearchFilter, OrderingFilter)
+    search_fields = ('name', 'description', 'category', 'slug')
 
 
 class ApiCategoryListView(ListAPIView):
@@ -98,5 +102,12 @@ class ApiCategoryListView(ListAPIView):
 
     def get_queryset(self, *args, **kwargs):
         return Product.objects.filter(category=self.kwargs['slug'])
+
+
+class ApiSearchListView(ListAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    filter_backends = (SearchFilter, OrderingFilter)
+    search_fields = ('name', 'description', 'category', 'slug')
 
 

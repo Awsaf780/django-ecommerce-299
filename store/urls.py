@@ -24,4 +24,7 @@ urlpatterns = [
     path('products/category/<slug>', views.products_category, name='products_cat'),
     path('products/category/<slug:slug>/<int:page>', views.products_category_pag, name='cat_pag'),
 
+
+    # path('recommend', views.recommend_products, name="test_recom")
+
 ]

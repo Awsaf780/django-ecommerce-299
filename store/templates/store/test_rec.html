@@ -1,0 +1,6 @@
+<h1>Showing Recommendation for {{product}} {{product.pk}}</h1>
+
+{% for recommend in recommended %}
+    <h4>{{recommend}}</h4>
+    <h4>{{recommend.pk}}</h4>
+{% endfor %}

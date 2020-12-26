@@ -5,11 +5,16 @@
 {% block content %}
 
 <style>
+    .section {
+        height: 80vh;
+    }
+
     .svg-background {
         width: 100%;
         position: absolute;
         z-index: -100;
         margin-top: -15vh;
+        height: 118vh;
     }
 
     .product-wrapper {
@@ -60,13 +65,17 @@
         max-height: 50vh;
         overflow-x: hidden;
     }
-    .section {
-        min-height: 80vh;
-        max-height: 100vh;
-    }
+
     .reviews {
         width: 60%;
         margin: 12vh auto;
+        margin-top: 10%;
+    }
+    .recommended-products {
+        width: 60%;
+        margin: 12vh auto;
+        margin-top: 10%;
+
     }
 
 
@@ -90,7 +99,10 @@
 </style>
 
 
-<img class="svg-background" src="{% static 'images/product-background.svg' %}" alt="">
+<!--<img class="svg-background" src="{% static 'images/product-background.svg' %}" alt="">-->
+<video class="svg-background" loop autoplay>
+    <source src="{% static 'live/store-clouds.webm' %}" type="video/webm">
+</video>
 
 <div class="product-wrapper">
 
@@ -98,12 +110,12 @@
 
         <div class="product-title">
         <h1>{{product.name}}</h1>
-        <h4 style="margin-top: 5vh; color: white">{{product.description}}</h4>
+        <h4 style="margin-top: 5vh; color: grey">{{product.description}}</h4>
         <button style="color: white; font-weight: bold; font-size: 1.2rem; padding: 10px 30px; margin-top: 5vh;" data-product="{{product.id}}" data-action="add" class="btn add-btn update-cart ld ld-zoom-in">Add to Cart</button>
         </div>
 
         <div class="product-image">
-            <img class="ld ld-bounce-alt-in" src="{{product.imageURL}}" alt="" style="width: 75%">
+            <img class="ld ld-bounce-alt-in" src="{{product.imageURL}}" alt="" style="max-width: 80%; max-height: 70%;">
         </div>
 
     </div>
@@ -157,11 +169,39 @@
 
 
 
-    </div>
-<!--    end of section-->
+
 
 
         {% endif %}
+    </div>
+<!--    end of section-->
+
+    <div class="section recommended-products">
+
+
+
+        {% if recommended_products %}
+        <h1>Suggested for you</h1>
+
+<div class="row">
+    {% for recommended in recommended_products %}
+    <div class="col-lg-4">
+        <img class="thumbnail" src="{{recommended.imageURL}}">
+        <div class="box-element product">
+        <h6><strong>{{recommended.name}}</strong></h6>
+        <hr>
+        <button style="color: white;" data-product="{{recommended.id}}" data-action="add" class="btn add-btn update-cart" onclick="cartSnack()">Add to Cart</button>
+        <a href="/product/{{recommended.slug}}" class="btn btn-secondary">View</a>
+        <h4 style="display: inline-block; float: right;">${{recommended.price}}</h4>
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+        {% endif %}
+
+
+    </div>
 
 
 

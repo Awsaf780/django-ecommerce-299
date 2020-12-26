@@ -3,6 +3,18 @@
 {% load static %}
 
 {% block content %}
+<style>
+    .svg-background {
+        width: 100%;
+        position: absolute;
+        z-index: -100;
+        height: 100%;
+    }
+</style>
+
+<video class="svg-background" loop autoplay>
+    <source src="{% static 'live/autumn-leaves.webm' %}" type="video/webm">
+</video>
 <div class="container">
 
 
@@ -15,7 +27,7 @@
                     <th><h5>Items: <strong>{{order.get_cart_items}}</strong></h5></th>
                     <th><h5>Total: <strong>${{order.get_cart_total|floatformat:2}}</strong></h5></th>
                     <th>
-                        <a style="float: right;" class="btn add-btn" href="{% url 'checkout' %}">Checkout</a>
+                        <a style="float: right; color: white" class="btn add-btn" href="{% url 'checkout' %}">Checkout</a>
                     </th>
                 </tr>
             </table>
