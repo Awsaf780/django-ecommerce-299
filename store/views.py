@@ -60,14 +60,18 @@ def view_product(request, slug):
     reviews = Sentiment.objects.filter(product=product)
     try:
         recommended = recommend_products(request, product.pk)
+        related_title = "Suggested for You"
     except:
-        recommended = []
+        random_products = Product.objects.all().order_by('?')[:3]
+        recommended = random_products
+        related_title = "Similar"
 
     context = {'product': product,
                'reviews': reviews,
                'form': form,
                'cartItems': cartItems,
                'recommended_products': recommended,
+               'suggest_title': related_title,
                }
 
     return render(request, 'store/view_product.html', context)

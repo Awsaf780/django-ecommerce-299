@@ -8,6 +8,13 @@
 <!--<h1>Welcome to your profile</h1>-->
 
 <style>
+    .svg-background {
+        width: 100%;
+        position: absolute;
+        z-index: -100;
+        margin-top: -15vh;
+        height: 118vh;
+    }
     .cover {
         border: 1px solid;
         width: 100%;
@@ -51,6 +58,10 @@
 <!--        align-items: flex-start;-->
     }
 </style>
+
+<video class="svg-background" loop autoplay>
+    <source src="{% static 'live/autumn-leaves2.webm' %}" type="video/webm">
+</video>
 
 <div class="container">
 
