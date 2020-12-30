@@ -139,7 +139,7 @@
 
 <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
 
-    <a class="navbar-brand" href="{% url 'store' %}">eCom</a>
+    <a class="navbar-brand" href="{% url 'store' %}" style="font-size: 2em">eCom</a>
 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -148,8 +148,10 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="{% url 'products' %}">API Store <span class="sr-only">(current)</span></a>
+            <li class="nav-item disabled">
+<!--                <a class="nav-link" href="{% url 'products' %}">API Store <span class="sr-only">(current)</span></a>-->
+                <a class="nav-link" href="/contact">By Team Bits and Bytes<span class="sr-only">(current)</span></a>
+
             </li>
 
 
@@ -204,7 +206,7 @@ Hello {{request.user}}
 </ul>
 
 {% else %}
-<a href="/accounts/login" class="btn btn-warning">Login</a>
+<a href="/accounts/login" class="btn btn-dark">Login</a>
 
 
 

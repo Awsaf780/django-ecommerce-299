@@ -27,6 +27,7 @@ urlpatterns = [
     path('products/category/<slug:slug>/<int:page>', views.products_category_pag, name='cat_pag'),
 
     path('search', views.search_product, name='search_product'),
+    path('contact', views.contact, name='contact'),
 
     # path('recommend', views.recommend_products, name="test_recom")
 

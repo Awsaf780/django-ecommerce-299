@@ -16,8 +16,10 @@ from django.contrib.auth.decorators import login_required
 
 domain = 'http://127.0.0.1:8000'
 
+
 def get_recommended_quantity():
     return 3
+
 
 def profile(request):
     data = cartData(request)
@@ -28,6 +30,15 @@ def profile(request):
 
     return render(request, 'store/profile.html', context)
 
+
+def contact(request):
+    context = {}
+
+    data = cartData(request)
+    cartItems = data['cartItems']
+    context['cartItems'] = cartItems
+
+    return render(request, 'store/contact.html', context)
 
 def search_product(request):
     context = {}
@@ -42,13 +53,13 @@ def search_product(request):
                   Product.objects.filter(description__contains=keyword) | \
                   Product.objects.filter(category__contains=keyword) | \
                   Product.objects.filter(slug__contains=keyword)
-        
+
         context['products'] = results
     else:
         context['products'] = Product.objects.all()
 
-
     return render(request, 'store/store.html', context)
+
 
 def view_product(request, slug):
     data = cartData(request)
@@ -156,6 +167,7 @@ def products(request):
     else:
         return products_pag(request, 1)
 
+
 def products_pag(request, page):
     data = cartData(request)
     cartItems = data['cartItems']
@@ -196,8 +208,6 @@ def products_pag(request, page):
 
     except:
         context = {'error': 'Forbidden'}
-
-
 
     return render(request, "store/test_hasan.html", context)
 
@@ -256,6 +266,7 @@ def products_category(request, slug):
     slug = slug
     return products_category_pag(request, slug, page)
 
+
 def products_category_pag(request, slug, page):
     data = cartData(request)
     cartItems = data['cartItems']
@@ -273,7 +284,7 @@ def products_category_pag(request, slug, page):
         previous = data['previous']
         try:
             previous_page = previous.replace("{}/api/category/{}?page=".format(domain, slug), "")
-            if(previous_page == '{}/api/category/{}'.format(domain, slug)):
+            if (previous_page == '{}/api/category/{}'.format(domain, slug)):
                 previous_page = 1
         except:
             previous_page = None
@@ -295,11 +306,7 @@ def products_category_pag(request, slug, page):
     except:
         context = {'error': 'Forbidden'}
 
-
-
     return render(request, "store/test_hasan.html", context)
-
-
 
 
 def store(request):
@@ -309,7 +316,6 @@ def store(request):
     products = Product.objects.all()
     context = {'products': products, 'cartItems': cartItems}
     return render(request, 'store/store.html', context)
-
 
 
 def view_category(request, slug):
@@ -413,6 +419,8 @@ from nltk.corpus import stopwords
 
 # stopword_list = stopwords.words('english')
 stopword_list = ['the', 'a', 'I', 'am', 'have', 'is', 'they', 'their', 'should']
+
+
 # stopword_list.append('die')
 # stopword_list.append('carbonara')
 # stopword_list.append('cheese')
@@ -487,6 +495,7 @@ def sentiment_score_to_rating(score):
 import pandas as pd
 from scipy.sparse import csr_matrix
 from sklearn.neighbors import NearestNeighbors
+
 
 def recommend_products(request, id):
     product_id = id
