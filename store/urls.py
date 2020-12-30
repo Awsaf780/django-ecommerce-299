@@ -18,12 +18,15 @@ urlpatterns = [
 
     path('accounts/profile/', views.profile, name='profile'),
 
+    # unnecessary urls for testing only
+
     path('products', views.products, name='products'),
     path('products/<page>', views.products_pag, name='test_page'),
 
     path('products/category/<slug>', views.products_category, name='products_cat'),
     path('products/category/<slug:slug>/<int:page>', views.products_category_pag, name='cat_pag'),
 
+    path('search', views.search_product, name='search_product'),
 
     # path('recommend', views.recommend_products, name="test_recom")
 

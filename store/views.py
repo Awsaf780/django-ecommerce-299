@@ -29,6 +29,26 @@ def profile(request):
     return render(request, 'store/profile.html', context)
 
 
+def search_product(request):
+    context = {}
+
+    data = cartData(request)
+    cartItems = data['cartItems']
+    context['cartItems'] = cartItems
+
+    if request.method == 'GET':
+        keyword = request.GET.get('keyword')
+        results = Product.objects.filter(name__contains=keyword) | \
+                  Product.objects.filter(description__contains=keyword) | \
+                  Product.objects.filter(category__contains=keyword) | \
+                  Product.objects.filter(slug__contains=keyword)
+        
+        context['products'] = results
+    else:
+        context['products'] = Product.objects.all()
+
+
+    return render(request, 'store/store.html', context)
 
 def view_product(request, slug):
     data = cartData(request)
@@ -62,7 +82,8 @@ def view_product(request, slug):
         recommended = recommend_products(request, product.pk)
         related_title = "Suggested for You"
     except:
-        random_products = Product.objects.all().order_by('?')[:3]
+        # random_products = Product.objects.all().order_by('?')[:3]
+        random_products = Product.objects.filter(category=product.category).order_by('?')[:3]
         recommended = random_products
         related_title = "Similar"
 
@@ -86,25 +107,12 @@ def registerPage(request):
             form.save()
 
             username = form.cleaned_data.get('username')
-            # user = User.objects.get(username=username)
-            #
-            # name = form.cleaned_data.get('first_name')
-            # email = form.cleaned_data.get('email')
             password = form.cleaned_data.get('password1')
-
-            # Customer.objects.create(
-            #     user=user,
-            #     name=name,
-            #     email=email,
-            # )
-            # print("Customer created")
-
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
                 return redirect('store')
             else:
-                # messages.success(request, "Account Created Successfully, " + user)
                 return redirect('loginPage')
 
     context = {'form': form}
