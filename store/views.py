@@ -14,33 +14,46 @@ import requests
 
 from django.contrib.auth.decorators import login_required
 
+domain = 'http://127.0.0.1:8000'
+
+def get_recommended_quantity():
+    return 3
 
 def profile(request):
-    context = {}
+    data = cartData(request)
+    cartItems = data['cartItems']
+    user = request.user
+
+    context = {'cartItems': cartItems, 'user': user}
 
     return render(request, 'store/profile.html', context)
 
 
-# def test(request, url):
-#     context = {}
-#
-#     r = requests.get('http://127.0.0.1:8000/api/product/list')
-#     data = r.json()
-#
-#     next = data['next']
-#
-#     count = data['count']
-#     products = data['results']
-#     context = {'count': count, 'products': products, 'next': next}
-#
-#
-#     print(context)
-#
-#     return render(request, "store/dashboard.html", context)
-#
+def search_product(request):
+    context = {}
+
+    data = cartData(request)
+    cartItems = data['cartItems']
+    context['cartItems'] = cartItems
+
+    if request.method == 'GET':
+        keyword = request.GET.get('keyword')
+        results = Product.objects.filter(name__contains=keyword) | \
+                  Product.objects.filter(description__contains=keyword) | \
+                  Product.objects.filter(category__contains=keyword) | \
+                  Product.objects.filter(slug__contains=keyword)
+        
+        context['products'] = results
+    else:
+        context['products'] = Product.objects.all()
+
+
+    return render(request, 'store/store.html', context)
 
 def view_product(request, slug):
-    context = {}
+    data = cartData(request)
+    cartItems = data['cartItems']
+
     product = Product.objects.get(slug=slug)
 
     form = SentimentForm()
@@ -65,7 +78,22 @@ def view_product(request, slug):
             form = SentimentForm()
 
     reviews = Sentiment.objects.filter(product=product)
-    context = {'product': product, 'reviews': reviews, 'form': form}
+    try:
+        recommended = recommend_products(request, product.pk)
+        related_title = "Suggested for You"
+    except:
+        # random_products = Product.objects.all().order_by('?')[:3]
+        random_products = Product.objects.filter(category=product.category).order_by('?')[:3]
+        recommended = random_products
+        related_title = "Similar"
+
+    context = {'product': product,
+               'reviews': reviews,
+               'form': form,
+               'cartItems': cartItems,
+               'recommended_products': recommended,
+               'suggest_title': related_title,
+               }
 
     return render(request, 'store/view_product.html', context)
 
@@ -79,25 +107,12 @@ def registerPage(request):
             form.save()
 
             username = form.cleaned_data.get('username')
-            # user = User.objects.get(username=username)
-            #
-            # name = form.cleaned_data.get('first_name')
-            # email = form.cleaned_data.get('email')
             password = form.cleaned_data.get('password1')
-
-            # Customer.objects.create(
-            #     user=user,
-            #     name=name,
-            #     email=email,
-            # )
-            # print("Customer created")
-
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
                 return redirect('store')
             else:
-                # messages.success(request, "Account Created Successfully, " + user)
                 return redirect('loginPage')
 
     context = {'form': form}
@@ -129,11 +144,179 @@ def logoutUser(request):
     return redirect('store')
 
 
+def products(request):
+    page = 1
+
+    if request.method == 'GET':
+        query = request.GET.get('search')
+        if query != None:
+            return search(request, page, query)
+        else:
+            return products_pag(request, 1)
+    else:
+        return products_pag(request, 1)
+
+def products_pag(request, page):
+    data = cartData(request)
+    cartItems = data['cartItems']
+
+    try:
+        r = requests.get('{}/api/product/list?page={}'.format(domain, page))
+        data = r.json()
+
+        next = data['next']
+        try:
+            next_page = next.replace("{}/api/product/list?page=".format(domain), "")
+        except:
+            next_page = None
+
+        previous = data['previous']
+        try:
+            previous_page = previous.replace("{}/api/product/list?page=".format(domain), "")
+            if (previous_page == '{}/api/product/list'.format(domain)):
+                previous_page = 1
+
+
+        except:
+            previous_page = None
+
+        count = data['count']
+
+        products = data['results']
+        uri_context = 'products'
+        context = {
+            'cartItems': cartItems,
+            'count': count,
+            'products': products,
+            'next_page': next_page,
+            'previous_page': previous_page,
+            'uri_context': uri_context,
+        }
+
+
+    except:
+        context = {'error': 'Forbidden'}
+
+
+
+    return render(request, "store/test_hasan.html", context)
+
+
+def search(request, page, query):
+    data = cartData(request)
+    cartItems = data['cartItems']
+
+    try:
+        r = requests.get('{}/api/product/list?page={}&search={}'.format(domain, page, query))
+        data = r.json()
+
+        next = data['next']
+        try:
+            next_page = next.replace("{}/api/product/list?page=".format(domain), "")
+            next_page = next_page.replace("&search={}".format(query), "")
+
+        except:
+            next_page = None
+
+        previous = str(data['previous'])
+        try:
+            previous_page = previous.replace("{}/api/product/list?search={}".format(domain, query), '1')
+            previous_page = previous_page.replace("{}/api/product/list?page=".format(domain), "")
+            previous_page = previous_page.replace("&search={}".format(page), "")
+
+        except:
+            previous_page = None
+
+        count = data['count']
+
+        products = data['results']
+        uri_context = 'products'
+
+        context = {
+            'cartItems': cartItems,
+            'count': count,
+            'products': products,
+            'next_page': next_page,
+            'previous_page': previous_page,
+            'uri_context': uri_context,
+            'query': query,
+        }
+
+
+    except:
+        context = {'error': 'Forbidden'}
+
+    print(context)
+
+    return render(request, "store/test_hasan.html", context)
+
+
+def products_category(request, slug):
+    page = 1
+    slug = slug
+    return products_category_pag(request, slug, page)
+
+def products_category_pag(request, slug, page):
+    data = cartData(request)
+    cartItems = data['cartItems']
+
+    try:
+        r = requests.get('{}/api/category/{}?page={}'.format(domain, slug, page))
+        data = r.json()
+
+        next = data['next']
+        try:
+            next_page = next.replace("{}/api/category/{}?page=".format(domain, slug), "")
+        except:
+            next_page = None
+
+        previous = data['previous']
+        try:
+            previous_page = previous.replace("{}/api/category/{}?page=".format(domain, slug), "")
+            if(previous_page == '{}/api/category/{}'.format(domain, slug)):
+                previous_page = 1
+        except:
+            previous_page = None
+
+        count = data['count']
+
+        products = data['results']
+        uri_context = 'products/category/{}'.format(slug)
+        context = {
+            'cartItems': cartItems,
+            'count': count,
+            'products': products,
+            'next_page': next_page,
+            'previous_page': previous_page,
+            'uri_context': uri_context,
+        }
+
+
+    except:
+        context = {'error': 'Forbidden'}
+
+
+
+    return render(request, "store/test_hasan.html", context)
+
+
+
+
 def store(request):
     data = cartData(request)
     cartItems = data['cartItems']
 
     products = Product.objects.all()
+    context = {'products': products, 'cartItems': cartItems}
+    return render(request, 'store/store.html', context)
+
+
+
+def view_category(request, slug):
+    data = cartData(request)
+    cartItems = data['cartItems']
+
+    products = Product.objects.filter(category=slug)
     context = {'products': products, 'cartItems': cartItems}
     return render(request, 'store/store.html', context)
 
@@ -228,14 +411,14 @@ from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 
-stopword_list = stopwords.words('english')
-
+# stopword_list = stopwords.words('english')
+stopword_list = ['the', 'a', 'I', 'am', 'have', 'is', 'they', 'their', 'should']
 # stopword_list.append('die')
-stopword_list.append('carbonara')
-stopword_list.append('cheese')
-stopword_list.append('ramen')
-stopword_list.append('stew')
-stopword_list.append("'ve")
+# stopword_list.append('carbonara')
+# stopword_list.append('cheese')
+# stopword_list.append('ramen')
+# stopword_list.append('stew')
+# stopword_list.append("'ve")
 
 
 def list_to_string(word_list):
@@ -298,3 +481,46 @@ def sentiment_score_to_rating(score):
         rating = 3
 
     return rating
+
+
+############### MACHINE LEARNING #######################
+import pandas as pd
+from scipy.sparse import csr_matrix
+from sklearn.neighbors import NearestNeighbors
+
+def recommend_products(request, id):
+    product_id = id
+    quantity = get_recommended_quantity()
+
+    sentiment = pd.DataFrame.from_records(Sentiment.objects.all().values('id', 'product', 'customer', 'rating'))
+
+    df_pivot = sentiment.pivot_table(index='product', columns='customer', values='rating').fillna(0)
+    query_array = df_pivot.loc[product_id].values.reshape(1, -1)
+    matrix = csr_matrix(df_pivot.values)
+
+    model_knn = NearestNeighbors(metric='cosine', algorithm='brute')
+    model_knn.fit(matrix)
+    distances, indices = model_knn.kneighbors(query_array, n_neighbors=quantity + 1)
+
+    recommended = []
+    for i in range(len(distances.flatten())):
+        if i == 0:
+            product_index = indices.flatten()[i]
+        else:
+            index = indices.flatten()[i]
+            recommended.append(df_pivot.index[index])
+
+    recommended_products = []
+    for id in recommended:
+        product = Product.objects.get(id=id)
+        recommended_products.append(product)
+
+    # original = Product.objects.get(id=product_id)
+    # context = {'sentiment': sentiment,
+    #            'product': original,
+    #            'recommended': recommended_products,
+    #            }
+
+    print(recommended_products)
+
+    return recommended_products

@@ -1,6 +1,26 @@
 {% extends 'store/main.html' %}
 {% load static %}
 {% block content %}
+
+<style>
+	.svg-background {
+        width: 100%;
+        position: absolute;
+        z-index: -100;
+        height: 100%;
+    }
+    .box-element{
+        padding: 40px;
+        border-radius: 30px;
+    }
+</style>
+
+<video class="svg-background" loop autoplay>
+    <source src="{% static 'live/autumn-leaves2.webm' %}" type="video/webm">
+</video>
+<div class="container">
+
+<div class="container">
      <div class="row">
 		<div class="col-lg-6">
 			<div class="box-element" id="form-wrapper">
@@ -19,7 +39,7 @@
 
 					<div id="shipping-info">
 						<hr>
-						<p>Shipping Information:</p>
+						<h2>Shipping Information</h2>
 						<hr>
 						<div class="form-field">
 							<input class="form-control" type="text" name="address" placeholder="Address..">
@@ -39,21 +59,26 @@
 					</div>
 
 					<hr>
-					<input id="form-button" class="btn btn-success btn-block" type="submit" value="Continue">
+					<input id="form-button" class="btn btn-block" style="background: var(--main-bg); color: white;" type="submit" value="Continue">
 				</form>
 			</div>
 
 			<br>
 			<div class="box-element hidden" id="payment-info">
-				<small>Paypal Options</small>
-				<button id="make-payment">Make Payment</button>
+				<span>
+
+
+				<h4>Bkash  </h4>
+				<button id="make-payment" style="background: var(--main-bg); color: white;">Make Payment</button>
+
+				</span>
 			</div>
 
 		</div>
 
 		<div class="col-lg-6">
 			<div class="box-element">
-				<a  class="btn btn-outline-dark" href="{% url 'cart' %}">&#x2190; Back to Cart</a>
+				<a  class="btn btn-dark" href="{% url 'cart' %}">&#x2190; Back to Cart</a>
 				<hr>
 				<h3>Order Summary</h3>
 				<hr>
@@ -71,7 +96,7 @@
 			</div>
 		</div>
 	</div>
-
+</div>
 <script>
 	var shipping = '{{order.shipping}}'
 	var total = '{{order.get_cart_total}}'

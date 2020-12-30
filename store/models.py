@@ -15,26 +15,26 @@ from django.contrib.auth.models import User
 
 class Product(models.Model):
     name = models.CharField(max_length=200)
-    slug = models.CharField(max_length=200, null=True, blank=True)
+    slug = models.CharField(max_length=200, null=True, blank=True, unique=True)
     description = models.TextField(default="")
     price = models.DecimalField(max_digits=7, decimal_places=2)
     digital = models.BooleanField(default=False, null=True, blank=False)
 
     CAT_CHOICES = (
-        ('Apparel-men', 'Apparel-men'),
-        ('Apparel-women', 'Apparel-women'),
-        ('Apparel-kids', 'Apparel-kids'),
+        ('apparel-men', 'Apparel-men'),
+        ('apparel-women', 'Apparel-women'),
+        ('apparel-kids', 'Apparel-kids'),
 
-        ('Electronics-smartphone', 'Electronics-smartphone'),
-        ('Electronics-accessory', 'Electronics-accessory'),
-        ('Electronics-computer', 'Electronics-computer'),
+        ('electronics-smartphone', 'Electronics-smartphone'),
+        ('electronics-accessory', 'Electronics-accessory'),
+        ('electronics-computer', 'Electronics-computer'),
 
-        ('Fashion-footwear', 'Fashion-footwear'),
-        ('Fashion-watch', 'Fashion-watch'),
-        ('Fashion-accessory', 'Fashion-accessory'),
-        ('Fashion-cosmetic', 'Fashion-cosmetic'),
+        ('fashion-footwear', 'Fashion-footwear'),
+        ('fashion-watch', 'Fashion-watch'),
+        ('fashion-accessory', 'Fashion-accessory'),
+        ('fashion-cosmetic', 'Fashion-cosmetic'),
 
-        ('Misc', 'Misc'),
+        ('misc', 'Misc'),
 
     )
 

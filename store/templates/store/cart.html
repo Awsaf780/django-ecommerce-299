@@ -3,21 +3,43 @@
 {% load static %}
 
 {% block content %}
+<style>
+    .svg-background {
+        width: 100%;
+        position: absolute;
+        z-index: -100;
+        height: 100%;
+    }
+    .box-element{
+        padding: 40px;
+        border-radius: 30px;
+    }
+</style>
+
+<video class="svg-background" loop autoplay>
+    <source src="{% static 'live/autumn-leaves2.webm' %}" type="video/webm">
+</video>
+<div class="container">
+
 
 <div class="row">
+
+    {% if order.get_cart_items != 0 %}
     <div class="col-lg-12">
         <div class="box-element">
-            <a class="btn btn-outline-dark" href="{% url 'store' %}">&#x2190; Continue Shopping</a>
+            <a class="btn btn-dark" href="{% url 'store' %}">&#x2190; Continue Shopping</a>
             <table class="table">
                 <tr>
-                    <th><h5>Items: <strong>{{order.get_cart_items}}</strong></h5></th>
-                    <th><h5>Total: <strong>${{order.get_cart_total|floatformat:2}}</strong></h5></th>
+                    <th><h4>Total Quantity: <strong>{{order.get_cart_items}}</strong></h4></th>
+                    <th><h4>Total Amount: <strong>${{order.get_cart_total|floatformat:2}}</strong></h4></th>
                     <th>
-                        <a style="float: right;" class="btn add-btn" href="{% url 'checkout' %}">Checkout</a>
+                        <a style="float: right; color: white" class="btn add-btn" href="{% url 'checkout' %}">Checkout</a>
                     </th>
                 </tr>
             </table>
         </div>
+
+
 
         <div class="box-element">
             <div class="cart-row">
@@ -53,8 +75,20 @@
             {% endfor %}
 
         </div>
+        {% else %}
 
+<div class="col-lg-12">
+<div class="box-element" style="padding: 40px 80px;">
+<h3>You Do Not Have Any Items in Cart <a style="float: right; color: white" class="btn add-btn" href="{% url 'store' %}">&#x2190; Continue Shopping</a></h3>
+
+</div>
+</div>
+
+        {% endif %}
     </div>
 </div>
+
+
+    </div>
 
 {% endblock content %}

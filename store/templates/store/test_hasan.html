@@ -4,10 +4,6 @@
 
 {% block content %}
 <style>
-body {
-    background: white;
-}
-
 #snackbar {
   visibility: hidden;
   min-width: 250px;
@@ -35,23 +31,20 @@ body {
     margin: 1% 4% 5% auto;
 }
 .category {
-    width: 15%;
-    margin: 3.3% auto 2% 3%;
+    width: 20%;
+    margin: 2% auto 2% 1%;
     position: fixed;
     z-index: 1;
+    background: #eee;
     overflow-x: hidden;
-    padding: 20px 30px;
-border-radius: 22px;
-background: #ffffff;
-box-shadow:  8px 8px 18px #e3e3e3,
-             -8px -8px 18px #ffffff;
+    padding: 20px 10px;
 }
 
 .category a {
-  padding: 6px 8px 6px 35px;
+  padding: 6px 8px 6px 16px;
   text-decoration: none;
   font-size: 18px;
-  color: var(--main-bg);
+  color: #2196F3;
   display: block;
 }
 .category h3 {
@@ -64,50 +57,24 @@ box-shadow:  8px 8px 18px #e3e3e3,
 .category a:hover {
   color: #064579;
 }
-.box-element {
-    border-radius: 0 0 20px 20px;
-    width: 390px;
-}
-.thumbnail {
-    width: 390px;
-    margin-top: 25px;
-border-radius: 12px 12px 0 0;
-background: rgb(255, 255, 255, 0.8);
-}
-.svg-background {
-width: 100%;
-position: fixed;
-z-index: -100;
-margin-top: -15vh;
-height: 118vh;
-}
 </style>
 
-<video class="svg-background" loop autoplay>
-    <source src="{% static 'live/autumn-leaves.webm' %}" type="video/webm">
-</video>
-
-
 <div class="category">
-    <div class="cat-head" style="height: 100%; background: var(--main-bg); margin: 0; padding: 5px 0; border-radius: 30px;">
-    <h3 style="color: white; text-align: center">Categories</h3>
-    </div>
-    <br>
+    <h3>Categories</h3>
 
+    <a href="/products">All API Products</a>
 
-    <a href="/">All Products</a>
-    <hr>
-    <a href="/category/Apparel-men">Clothes</a>
-    <a href="/category/Fashion-accessory">Accessories</a>
-    <a href="/category/Fashion-footwear">Shoes</a>
-    <a href="/category/Misc">Misc</a>
+    <a href="/products/category/Apparel-men">Clothes</a>
+    <a href="/products/category/Fashion-accessory">Accessories</a>
+    <a href="/products/category/Fashion-footwear">Shoes</a>
+    <a href="/products/category/Misc">Misc</a>
 
 </div>
 
 </div>
 
 <div class="all-products">
-{% if products %}
+
     <div class="row">
 
 <div class="form-inline mob-cart-float">
@@ -117,10 +84,15 @@ height: 118vh;
     <p id="cart-total-mob">{{cartItems}}</p>
 </div>
 
+{% if error %}
+    <h1>{{error}}</h1>
+
+    {% else %}
+
 
     {% for product in products %}
     <div class="col-lg-4">
-        <img class="thumbnail" src="{{product.imageURL}}">
+        <img class="thumbnail" src="{{product.image}}">
         <div class="box-element product">
             <h6><strong>{{product.name}}</strong></h6>
             <hr>
@@ -132,20 +104,60 @@ height: 118vh;
     {% endfor %}
 
 
+
+
+
 <div id="snackbar">Added!</div>
 
 </div>
 
+
+{% if query is None %}
+
+
+<div class="pagination-box" style="margin: 30px auto; display: flex; justify-content: center; align-items: center;">
+<span>
+{% if previous_page is None %}
+        <button type="button" class="btn btn-primary disabled">Previous</button>
+{% else %}
+        <button type="button" class="btn btn-primary"><a style="color: white" href="/{{uri_context}}/{{previous_page}}">Previous</a></button>
+{% endif %}
+
+{% if next_page is None %}
+    <button type="button" class="btn btn-primary disabled">Next</button>
+{% else %}
+    <button type="button" class="btn btn-primary"><a style="color: white" href="/{{uri_context}}/{{next_page}}">Next</a></button>
+{% endif %}
+</span>
 </div>
 
-{% else %}
-<div class="container" style="margin-top: 100px; margin-left: 380px;" >
 
-<h3>No results Found </h3>
+
+
+{% else %}
+
+  <div class="pagination-box" style="margin: 30px auto; display: flex; justify-content: center; align-items: center;">
+<span>
+{% if previous_page is None %}
+        <button type="button" class="btn btn-primary disabled">Previous</button>
+{% else %}
+        <button type="button" class="btn btn-primary"><a style="color: white" href="/{{uri_context}}/{{previous_page}}&search={{query}}">Previous</a></button>
+{% endif %}
+
+{% if next_page is None %}
+    <button type="button" class="btn btn-primary disabled">Next</button>
+{% else %}
+    <button type="button" class="btn btn-primary"><a style="color: white" href="/{{uri_context}}/{{next_page}}&search={{query}}">Next</a></button>
+{% endif %}
+</span>
+</div>
+
+    {% endif %}
+
+
 
 </div>
 {% endif %}
-
 <script>
     function cartSnack() {
         var x = document.getElementById("snackbar");
@@ -155,7 +167,9 @@ height: 118vh;
 </script>
 
 
-
+<h1>{{previous_page}}</h1>
+<h1>{{next_page}}</h1>
 
 {% endblock content %}
+
 

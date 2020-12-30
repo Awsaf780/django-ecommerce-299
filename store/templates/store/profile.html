@@ -4,6 +4,106 @@
 
 {% block content %}
 
-<h1>Hi {{request.user}} kireh</h1>
+<!--<h1>Hi {{request.user}}</h1>-->
+<!--<h1>Welcome to your profile</h1>-->
+
+<style>
+    .svg-background {
+        width: 100%;
+        position: absolute;
+        z-index: -100;
+        margin-top: -15vh;
+        height: 118vh;
+    }
+    .cover {
+        border: 1px solid;
+        width: 100%;
+        height: 40vh;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: url({% static 'images/profile-background.svg' %});
+    }
+    .cover h1 {
+        color: white;
+        font-size: 60px;
+    }
+    .cover p {
+        color: white;
+        font-size: 20px;
+    }
+
+
+    .profile-data {
+        border: 1px solid;
+        width: 100%;
+        height: 50vh;
+    }
+    .profile-data-row{
+        border: 1px solid;
+        width: 100%;
+        height: 25vh;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+    }
+    .data-box{
+        border: 1px solid;
+        width: 35%;
+        height: 15vh;
+<!--        display: flex;-->
+<!--        flex-direction: column;-->
+<!--        align-items: flex-start;-->
+    }
+</style>
+
+<video class="svg-background" loop autoplay>
+    <source src="{% static 'live/autumn-leaves2.webm' %}" type="video/webm">
+</video>
+
+<div class="container">
+
+
+
+    <div class="cover">
+        <h1>Dashboard</h1>
+        <hr style="color: white;">
+        <p>Welcome {{request.user}}</p>
+    </div>
+
+    <hr>
+
+    <div class="profile-data">
+
+        <div class="profile-data-row">
+            <div class="data-box">
+                <h5>Title 1</h5>
+                <hr>
+                <p>Some Value</p>
+            </div>
+            <div class="data-box">
+                <h5>Title 2</h5>
+                <hr>
+                <p>Some Value</p>
+            </div>
+        </div>
+
+        <div class="profile-data-row">
+            <div class="data-box">
+                <h5>Title 3</h5>
+                <hr>
+                <p>Some Value</p>
+            </div>
+            <div class="data-box">
+                <h5>Title 3</h5>
+                <hr>
+                <p>Some Value</p>
+            </div>
+        </div>
+
+    </div>
+</div>
 
 {% endblock %}
