@@ -25,8 +25,53 @@ def profile(request):
     data = cartData(request)
     cartItems = data['cartItems']
     user = request.user
-
     context = {'cartItems': cartItems, 'user': user}
+
+    if request.user.is_authenticated and request.user.username != 'admin':
+        # Total Orders
+        try:
+            total_orders = Order.objects.filter(customer_id=request.user.pk, complete=1).count()
+        except: total_orders = 0
+        context['total_orders'] = total_orders
+
+        # Last Order List
+        try:
+            last_order_id = Order.objects.filter(customer_id=request.user.pk, complete=1).latest('date_ordered')
+            context['last_order_id'] = last_order_id
+
+            latest = OrderItem.objects.filter(order_id=last_order_id).first()
+            # context['latest_orders'] = latest
+
+            latest_product_id = latest.product_id
+            latest_product_name = Product.objects.get(id=latest_product_id)
+            context['latest_product'] = latest_product_name
+            context['latest_product_quantity'] = latest.quantity
+        except:
+            context['latest_product'] = 'None'
+
+
+
+        # Total Sentiment
+        try:
+            total_sentiments = Sentiment.objects.filter(customer_id=request.user.pk).count()
+        except: total_sentiments = 0
+        context['total_sentiments'] = total_sentiments
+
+        # Average Rating
+        try:
+            last_sentiment = Sentiment.objects.filter(customer_id=request.user.pk)
+            ratings = []
+
+            for sentiment in last_sentiment:
+                ratings.append(sentiment.rating)
+            sum = 0
+
+            for rating in ratings:
+                sum += int(rating)
+            average = sum / len(ratings)
+        except: average = 0
+        context['average_rating'] = average
+
 
     return render(request, 'store/profile.html', context)
 
