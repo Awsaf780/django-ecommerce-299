@@ -1,4 +1,4 @@
-# eCommerce Website
+# eCommerce Website (CSE 299 Project)
 
 Instructions:
 
